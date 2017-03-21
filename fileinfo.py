@@ -47,7 +47,7 @@ class Fileinfo:
             self.size = f'Size: {self.MBSize} MB ({self.size} Bytes)'
             self.ATime = f'Last Access: {self.ATime:{formatDate}}'
             self.MTime = f'Last Modified: {self.MTime:{formatDate}}'
-            self.CTime = f'Created: {self.CTime:{formatDate}}'
+            self.CTime = f'Created at: {self.CTime:{formatDate}}'
             self.MD5 = f'MD5: {self.MD5}'
             self.SHA1 = f'SHA1: {self.SHA1}'
             self.SHA256 = f'SHA256: {self.SHA256}'
@@ -77,26 +77,53 @@ class Fileinfo:
 
     def GUIOutput(self):
         self.makeReadable('GUI')
-        #self.app.geometry('800x300')
+        self.app.geometry('700x200')
         self.app.wm_title(f'{self.name} - {self.SHA256}')
 
-        labelName=StringVar()
-        labelName.set('Name:')
-        labelFirst=Label(self.app, textvariable=labelName, height=4)
-        labelFirst.pack(side='left')
-        inputName=StringVar(None)
-        inputName.set(self.name)
-        inputFirst=Entry(self.app,textvariable=inputName,width=50)
-        inputFirst.pack(side='left')
+        labelNames = ['Name: ', 'Size: ', 'Last Access: ', 'Last Modified: ', \
+                      'Created at: ', 'MD5: ', 'SHA1: ', 'SHA256: ', 'SHA512: ']
+        for i, labelName in enumerate(labelNames, start=0):
+            Label(self.app, text=labelName).grid(row=i, sticky='W')
 
-        labelSize=StringVar()
-        labelSize.set('Size:')
-        labelSecond=Label(self.app, textvariable=labelSize, height=4)
-        labelSecond.pack(side='left')
-        inputSize=StringVar(None)
-        inputSize.set(self.size)
-        inputSecond=Entry(self.app,textvariable=inputSize,width=50)
-        inputSecond.pack(side='left')
+
+        eName1 = Entry(self.app)
+        eName1.insert(0, self.name)
+        eName1.configure(state='readonly') #for some reason Tkinter doesn't allow to insert to a readonly Entry
+        eSize2 = Entry(self.app)
+        eSize2.insert(0, self.size)
+        eSize2.configure(state='readonly')
+        eATime3 = Entry(self.app)
+        eATime3.insert(0, self.ATime)
+        eATime3.configure(state='readonly')
+        eMTime4 = Entry(self.app)
+        eMTime4.insert(0, self.MTime)
+        eMTime4.configure(state='readonly')
+        eCTime5 = Entry(self.app)
+        eCTime5.insert(0, self.CTime)
+        eCTime5.configure(state='readonly')
+        eMD5 = Entry(self.app)
+        eMD5.insert(0, self.MD5)
+        eMD5.configure(state='readonly')
+        eSHA1 = Entry(self.app)
+        eSHA1.insert(0, self.SHA1)
+        eSHA1.configure(state='readonly')
+        eSHA256 = Entry(self.app)
+        eSHA256.insert(0, self.SHA256)
+        eSHA256.configure(state='readonly')
+        eSHA512 = Entry(self.app)
+        eSHA512.insert(0, self.SHA512)
+        eSHA512.configure(state='readonly')
+
+        eName1.grid(row=0, column=1)
+        eSize2.grid(row=1, column=1)
+        eATime3.grid(row=2, column=1)
+        eMTime4.grid(row=3, column=1)
+        eCTime5.grid(row=4, column=1)
+        eMD5.grid(row=5, column=1)
+        eSHA1.grid(row=6, column=1)
+        eSHA256.grid(row=7, column=1)
+        eSHA512.grid(row=8, column=1)
+        self.app.grid_columnconfigure(1, minsize=100)
 
         self.app.mainloop()
 
@@ -111,12 +138,12 @@ if __name__ == '__main__':
         file = sys.argv[1]
     except IndexError:
         #root.withdraw()
-        file = filedialog.askopenfilename()
-        #file = 'C:\\Users\\Eduard\\Desktop\\GifCam.exe'
+        #file = filedialog.askopenfilename()
+        file = 'C:\\Users\\Eduard\\Desktop\\GifCam.exe'
 
     info = Fileinfo(file)
 
-    info.consoleOutput()
+    info.GUIOutput()
     '''
     try:
         if sys.argv[2].lower == 'nogui' or sys.argv[2].lower == '--nogui':
